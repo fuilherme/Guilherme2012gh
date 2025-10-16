@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Alvares Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Google Fonts e Remix Icon para ícones bonitos -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <!-- LOGIN (NÃO ALTERE!) -->
+  <div id="login-screen">
+    <div class="login-container">
+      <div class="login-logo">
+        <i class="ri-bar-chart-2-fill"></i>
+        <span>Devsoft</span>
+      </div>
+      <form class="login-form" id="loginForm">
+        <div class="error-message" id="loginError">Usuário ou senha inválidos!</div>
+        <input type="text" id="username" placeholder="Usuário" autocomplete="username" required>
+        <input type="password" id="password" placeholder="Senha" autocomplete="current-password" required>
+        <button type="submit">Entrar</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- DASHBOARD NOVO -->
+  <div id="dashboard-root" style="display:none;">
+    <div class="topbar">
+      <button class="menu-toggle" id="menuToggle"><i class="ri-menu-line"></i></button>
+      <span class="topbar-title"><i class="ri-bar-chart-2-fill"></i> Alvares Cockpit</span>
+      <span class="user-info"><i class="ri-user-3-fill"></i> gerente</span>
+    </div>
+    <nav class="sidebar" id="sidebar">
+      <div class="sidebar-title">Menu</div>
+      <button class="tab-btn active" data-tab="main"><i class="ri-dashboard-2-line"></i> Dashboard</button>
+      <button class="tab-btn" data-tab="users"><i class="ri-team-line"></i> Usuários</button>
+      <button class="tab-btn" data-tab="reports"><i class="ri-file-chart-line"></i> Relatórios</button>
+      <button class="tab-btn" data-tab="settings"><i class="ri-settings-3-line"></i> Configurações</button>
+      <button class="tab-btn" data-tab="products"><i class="ri-archive-2-line"></i> Produtos</button>
+      <button class="tab-btn danger" id="logoutBtnSidebar"><i class="ri-logout-circle-line"></i> Sair</button>
+      <div class="sidebar-footer">Alvares &copy; 2025</div>
+    </nav>
+    <main class="main-content">
+      <!-- Dashboard Principal -->
+      <section id="main-tab" class="tab-content active">
+        <h2><i class="ri-dashboard-2-line"></i> Dashboard Principal</h2>
+        <div class="dashboard-cards">
+          <div class="card">
+            <div class="card-title"><i class="ri-team-line"></i> Usuários</div>
+            <div class="card-value" id="users-count">0</div>
+          </div>
+          <div class="card">
+            <div class="card-title"><i class="ri-archive-2-line"></i> Produtos</div>
+            <div class="card-value" id="products-count">0</div>
+          </div>
+          <div class="card">
+            <div class="card-title"><i class="ri-money-dollar-circle-line"></i> Vendas (R$)</div>
+            <div class="card-value">12.350</div>
+          </div>
+        </div>
+        <div style="max-width:540px;margin:auto;">
+          <canvas id="companyChart"></canvas>
+        </div>
+      </section>
+      <!-- Usuários -->
+      <section id="users-tab" class="tab-content">
+        <h2><i class="ri-team-line"></i> Usuários</h2>
+        <button id="add-user-btn" class="action-btn"><i class="ri-user-add-line"></i> Adicionar Usuário</button>
+        <table id="users-table">
+          <thead>
+            <tr><th>Nome</th><th>Cargo</th><th>Ações</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <div id="add-user-form" class="modal" style="display:none;"></div>
+      </section>
+      <!-- Relatórios -->
+      <section id="reports-tab" class="tab-content">
+        <h2><i class="ri-file-chart-line"></i> Relatórios</h2>
+        <ul>
+          <li>Relatório de vendas: <span style="color:green;">Em alta</span></li>
+          <li>Relatório de acessos: <span style="color:blue;">1.025 acessos</span></li>
+          <li>Lucro mensal: <span style="color:green;">R$ 3.800</span></li>
+        </ul>
+      </section>
+      <!-- Configurações -->
+      <section id="settings-tab" class="tab-content">
+        <h2><i class="ri-settings-3-line"></i> Configurações</h2>
+        <form>
+          <label for="theme-select"><i class="ri-palette-fill"></i> Tema:</label>
+          <select id="theme-select">
+            <option value="claro">Claro</option>
+            <option value="escuro">Escuro</option>
+          </select>
+        </form>
+        <div class="conf-box">
+          <h3><i class="ri-lock-2-line"></i> Segurança</h3>
+          <ul>
+            <li>Permissões flexíveis para usuários</li>
+            <li>Senha dos usuários protegida</li>
+            <li>Logout instantâneo</li>
+          </ul>
+        </div>
+        <div class="conf-box">
+          <h3><i class="ri-tools-line"></i> Sistema</h3>
+          <ul>
+            <li>Gráficos dinâmicos</li>
+            <li>Dados salvos no dispositivo</li>
+            <li>Pronto para evoluir com API</li>
+          </ul>
+        </div>
+      </section>
+      <!-- Produtos -->
+      <section id="products-tab" class="tab-content">
+        <h2><i class="ri-archive-2-line"></i> Produtos</h2>
+        <ul id="products-list"></ul>
+        <button id="add-product-btn" class="action-btn"><i class="ri-add-box-line"></i> Adicionar Produto</button>
+        <div id="add-product-form" class="modal" style="display:none;">
+          <div class="modal-content">
+            <h3>Novo Produto</h3>
+            <input type="text" id="new-product-name" placeholder="Nome do produto">
+            <div class="modal-actions">
+              <button id="save-product-btn" class="action-btn">Salvar</button>
+              <button id="cancel-product-btn" class="action-btn danger">Cancelar</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
